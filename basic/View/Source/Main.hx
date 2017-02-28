@@ -1,9 +1,9 @@
 /*
 
 Basic View example in Away3d
- 
+
 Demonstrates:
- 
+
 How to create a 3D environment for your objects
 How to add a new textured object to your world
 How to rotate an object in your world
@@ -38,74 +38,74 @@ THE SOFTWARE.
 
 package
 {
-	import away3d.containers.*;
-	import away3d.entities.*;
-	import away3d.materials.*;
-	import away3d.primitives.*;
-	import away3d.utils.*;
-	
-	import flash.display.*;
-	import flash.events.*;
-	import flash.geom.Vector3D;
+import away3d.containers.*;
+import away3d.entities.*;
+import away3d.materials.*;
+import away3d.primitives.*;
+import away3d.utils.*;
 
-	[SWF(backgroundColor="#000000", frameRate="60", quality="LOW")]
+import flash.display.*;
+import flash.events.*;
+import flash.geom.Vector3D;
+
+[SWF(backgroundColor="#000000", frameRate="60", quality="LOW")]
+
+public class Basic_View extends Sprite
+{
+	//plane texture
+	[Embed(source="/../embeds/floor_diffuse.jpg")]
+	public static var FloorDiffuse:Class;
 	
-	public class Basic_View extends Sprite
+	//engine variables
+	private var _view:View3D;
+	
+	//scene objects
+	private var _plane:Mesh;
+	
+	/**
+	 * Constructor
+	 */
+	public function Basic_View()
 	{
-		//plane texture
-		[Embed(source="/../embeds/floor_diffuse.jpg")]
-		public static var FloorDiffuse:Class;
+		stage.scaleMode = StageScaleMode.NO_SCALE;
+		stage.align = StageAlign.TOP_LEFT;
 		
-		//engine variables
-		private var _view:View3D;
+		//setup the view
+		_view = new View3D();
+		addChild(_view);
 		
-		//scene objects
-		private var _plane:Mesh;
+		//setup the camera
+		_view.camera.z = -600;
+		_view.camera.y = 500;
+		_view.camera.lookAt(new Vector3D());
 		
-		/**
-		 * Constructor
-		 */
-		public function Basic_View()
-		{
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.align = StageAlign.TOP_LEFT;
-			
-			//setup the view
-			_view = new View3D();
-			addChild(_view);
-			
-			//setup the camera
-			_view.camera.z = -600;
-			_view.camera.y = 500;
-			_view.camera.lookAt(new Vector3D());
-			
-			//setup the scene
-			_plane = new Mesh(new PlaneGeometry(700, 700), new TextureMaterial(Cast.bitmapTexture(FloorDiffuse)));
-			_view.scene.addChild(_plane);
-			
-			//setup the render loop
-			addEventListener(Event.ENTER_FRAME, _onEnterFrame);
-			stage.addEventListener(Event.RESIZE, onResize);
-			onResize();
-		}
+		//setup the scene
+		_plane = new Mesh(new PlaneGeometry(700, 700), new TextureMaterial(Cast.bitmapTexture(FloorDiffuse)));
+		_view.scene.addChild(_plane);
 		
-		/**
-		 * render loop
-		 */
-		private function _onEnterFrame(e:Event):void
-		{
-			_plane.rotationY += 1;
-			
-			_view.render();
-		}
-		
-		/**
-		 * stage listener for resize events
-		 */
-		private function onResize(event:Event = null):void
-		{
-			_view.width = stage.stageWidth;
-			_view.height = stage.stageHeight;
-		}
+		//setup the render loop
+		addEventListener(Event.ENTER_FRAME, _onEnterFrame);
+		stage.addEventListener(Event.RESIZE, onResize);
+		onResize();
 	}
+	
+	/**
+	 * render loop
+	 */
+	private function _onEnterFrame(e:Event):void
+	{
+		_plane.rotationY += 1;
+		
+		_view.render();
+	}
+	
+	/**
+	 * stage listener for resize events
+	 */
+	private function onResize(event:Event = null):void
+	{
+		_view.width = stage.stageWidth;
+		_view.height = stage.stageHeight;
+	}
+}
 }
